@@ -1,4 +1,4 @@
 [core]
-    remote = myremote
-['remote "myremote"']
+    remote = production
+['remote "production"']
     url = s3://bdcc-bucket-01/dvc-storage
