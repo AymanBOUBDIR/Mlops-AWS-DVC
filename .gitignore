@@ -1,3 +1,5 @@
 /models
 /data
+!data/dataset.csv.dvc
+!data/.gitignore
 .dvc/config.local
