@@ -34,6 +34,6 @@ dvc doctor
 
 
 ``` bash
-# find the default.json file credentials \
+# find the default.json file credentials
 C:\Users\YourUsername\AppData\Local
 ```
