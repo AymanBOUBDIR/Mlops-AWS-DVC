@@ -73,23 +73,14 @@ jobs:
         # 4. Pousser les blobs vers S3
         dvc push
 
-    - name: Build CML report
+    - name: Publish CML report
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "## Metrics" > report.md
         awk 'NR%4 {print "\n" $0}{print ""}' metrics.txt >> report.md
         echo "## Confusion Matrix" >> report.md
         echo "![](./conf_matrix.png)" >> report.md
 
-    - name: Publish CML report (PR)
-      if: github.event_name == 'pull_request'
-      env:
-        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        cml comment create --target=pr report.md
-
-    - name: Publish CML report (Commit)
-      if: github.event_name == 'push'
-      env:
-        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        cml comment create --target=commit report.md
+        # commentaire automatique sur le commit / PR
+        cml comment create --pr report.md
