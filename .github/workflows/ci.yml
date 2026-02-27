@@ -36,7 +36,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       run: |
-         dvc pull -v
+         dvc pull || echo "No remote cache yet"
 
     - name: Train / Eval / Push artifacts
       env:
@@ -76,4 +76,4 @@ jobs:
         echo "![](./conf_matrix.png)" >> report.md
 
         # commentaire automatique sur le commit / PR
-        cml comment create --pr report.md
+        cml comment create --target=commit report.md
