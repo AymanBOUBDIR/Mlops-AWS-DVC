@@ -1,6 +1,13 @@
 name: churn-imbalanced-dataset
 
-on: [push]
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - main
 
 permissions: write-all
 
@@ -36,7 +43,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       run: |
-         dvc pull || echo "No remote cache yet"
+        dvc pull -v
 
     - name: Train / Eval / Push artifacts
       env:
