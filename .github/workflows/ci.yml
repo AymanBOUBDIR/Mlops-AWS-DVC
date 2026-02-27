@@ -1,6 +1,13 @@
 name: churn-imbalanced-dataset
 
-on: [push]
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - main
 
 permissions: write-all
 
@@ -36,7 +43,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       run: |
-        dvc pull 
+        dvc pull -v
 
     - name: Train / Eval / Push artifacts
       env:
@@ -66,14 +73,23 @@ jobs:
         # 4. Pousser les blobs vers S3
         dvc push
 
-    - name: Publish CML report
-      env:
-        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build CML report
       run: |
         echo "## Metrics" > report.md
         awk 'NR%4 {print "\n" $0}{print ""}' metrics.txt >> report.md
         echo "## Confusion Matrix" >> report.md
         echo "![](./conf_matrix.png)" >> report.md
 
-        # commentaire automatique sur le commit / PR
-        cml comment create --pr report.md
+    - name: Publish CML report (PR)
+      if: github.event_name == 'pull_request'
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        cml comment create --target=pr report.md
+
+    - name: Publish CML report (Commit)
+      if: github.event_name == 'push'
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        cml comment create --target=commit report.md
