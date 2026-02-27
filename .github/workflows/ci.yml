@@ -84,4 +84,3 @@ jobs:
 
         # commentaire automatique sur le commit / PR
         cml comment create --target=pr report.md
-        
