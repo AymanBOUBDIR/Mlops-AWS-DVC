@@ -76,4 +76,4 @@ jobs:
         echo "![](./conf_matrix.png)" >> report.md
 
         # commentaire automatique sur le commit / PR
-        cml comment create --target=commit report.md
+        cml comment create --pr report.md
