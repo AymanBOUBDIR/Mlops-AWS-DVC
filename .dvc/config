@@ -1,4 +1,5 @@
 [core]
-    remote = production
-['remote "production"']
+    remote = myremote
+['remote "myremote"']
     url = s3://bdcc-bucket-01/dvc-storage
+    region = us-east-1
